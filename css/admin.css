@@ -52,7 +52,7 @@
     position: relative;
     
 }
-.admin_click .iconfont{
+#admin_person .iconfont{
     font-size: 24px;
     color: #FFF;
     text-align: center;
@@ -94,7 +94,7 @@
     min-height: 800px;
 }
 #admin_panel_menu{
-    width: 260px;
+    width: 240px;
     min-height: 500px;
     padding-bottom: 40px;
     background-color: #f6f6f6;
@@ -106,20 +106,21 @@
     left: 0px;
     top: 0px;
     min-height: 500px;
-    margin-left:260px;
+    margin-left:240px;
     position: absolute;
 }
 #admin_panel_menu .admin_click::before{
     background-color:rgba(65, 160, 221,0.8);
 }
 .menu{
-    width: 260px;
+    width: 100%;
     height: 60px;
     line-height:60px;
     color: #586376;
     text-align: center;
     position: relative;
     overflow: hidden;
+    font-size: 16px;
 }
 .menu.seleted{
     color: #FFF;
@@ -130,8 +131,13 @@
     border-top:1px solid rgba(0,0,0,0.1);
     margin: 2px 20px;
 }
+.menu>.iconfont{
+    font-size: 24px;
+}
 .menu>span{
     position: relative;
+    vertical-align: middle;
+    padding: 3px;
 }
 .menu:hover{
     color: #FFF;
