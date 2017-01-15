@@ -52,6 +52,11 @@
     position: relative;
     
 }
+.admin_click .iconfont{
+    font-size: 24px;
+    color: #FFF;
+    text-align: center;
+}
 #admin_person .admin_click::before{
     background-color:#41a0dd;
 }

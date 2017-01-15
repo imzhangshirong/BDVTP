@@ -29,6 +29,11 @@ body{
     display: inline-block;
     margin-top:16px;
 }
+#index_logo>.iconfont{
+    color: #FFF;
+    font-size:48px;
+    display: inline-block;
+}
 #index_logo_text{
     position: relative;
     display: inline-block;
