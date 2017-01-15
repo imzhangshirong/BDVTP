@@ -15,11 +15,17 @@ function exitByError($code,$msg){
         'msg'=>$msg
     ),true));
 }
-function exitByData($msg,$data){
+function successByData($msg,$data){
     exit(json_encode(array(
         'code'=>0,
         'msg'=>$msg,
         'data'=>$data
+    ),true));
+}
+function successByMsg($msg){
+    exit(json_encode(array(
+        'code'=>0,
+        'msg'=>$msg
     ),true));
 }
 ?>

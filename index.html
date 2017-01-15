@@ -34,12 +34,29 @@
         </div>
     </body>
     <script>
+        var passCaptcha={
+            geetest_challenge:"",
+            geetest_seccode:"",
+            geetest_validate:""
+        };
         var handler = function (captchaObj){
             captchaObj.appendTo("#captcha");
             captchaObj.onSuccess(function (){
-                
+                passCaptcha=captchaObj.getValidate();
+                console.log(passCaptcha);
             });
         };
+        $("#login").on("click",function(){
+            $.ajax({
+                url: "./admin/api.php?api=verifyLogin",
+                type: "post",
+                data:passCaptcha,
+                dataType: "json",
+                success: function(data){
+                    if(data.msg)alert(data.msg);
+                }
+            });
+        });
         $.ajax({
             url: "./admin/api.php?api=getCaptcha&type=pc&rand="+Math.round(Math.random()*100),
             type: "get",
