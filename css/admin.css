@@ -1,0 +1,133 @@
+#admin_person{
+    float: right;
+    height: 100%;
+}
+#admin_info{
+    position: relative;
+    float: left;
+    margin-top:20px;
+    padding: 0px 20px;
+}
+#admin_profile_name{
+    color: #FFF;
+    display: inline-block;
+    line-height: 40px;
+    vertical-align: top;
+    font-size: 14px;
+}
+#admin_profile_img{
+    display: inline-block;
+    border-radius: 50%;
+    vertical-align: top;
+    margin-right: 8px;
+}
+.admin_person_button{
+    float: left;
+    width: 80px;
+    padding: 0px 10px;
+    height: 100%;
+    position: relative;
+    border-left:1px solid rgba(255,255,255,0.15);
+}
+#admin_message>span{
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    background-color: #db4b4b;
+    color: #FFF;
+    padding: 0px 6px;
+    border-radius: 9px;
+    font-size: 10px;
+    line-height: 18px;
+}
+.admin_click>img{
+    position: absolute;
+    top:28px;
+    left:28px;
+}
+.admin_click{
+    overflow: hidden;
+    cursor: pointer;
+    line-height: 80px;
+    position: relative;
+    
+}
+#admin_person .admin_click::before{
+    background-color:#41a0dd;
+}
+.admin_click::before{
+    content: "";
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+    position: absolute;
+    left:50%;
+    top:50%;
+    margin-left:0px;
+    margin-top:0px;
+    display: block;
+    border-radius: 50%;
+    transition: all 0.2s linear;
+}
+.admin_click:hover::before{
+    content: "";
+    width: 300px;
+    height: 300px;
+    opacity: 1;
+    left:50%;
+    top:50%;
+    margin-left:-150px;
+    margin-top:-150px;
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+}
+.admin_click:hover{
+    background-color: rgba(255,255,255,0.2);
+}
+#admin_panel{
+    min-height: 800px;
+}
+#admin_panel_menu{
+    width: 260px;
+    min-height: 500px;
+    padding-bottom: 40px;
+    background-color: #f6f6f6;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+#admin_panel_operation{
+    left: 0px;
+    top: 0px;
+    min-height: 500px;
+    margin-left:260px;
+    position: absolute;
+}
+#admin_panel_menu .admin_click::before{
+    background-color:rgba(65, 160, 221,0.8);
+}
+.menu{
+    width: 260px;
+    height: 60px;
+    line-height:60px;
+    color: #586376;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.menu.seleted{
+    color: #FFF;
+    background-color:rgba(65, 160, 221,1);
+    box-shadow:inset 0px 0px 5px rgba(0,0,0,0.2);
+}
+.line{
+    border-top:1px solid rgba(0,0,0,0.1);
+    margin: 2px 20px;
+}
+.menu>span{
+    position: relative;
+}
+.menu:hover{
+    color: #FFF;
+}
