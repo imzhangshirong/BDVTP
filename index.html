@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>大数据虚拟终端平台</title>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" type="text/css" href="./css/index.css?t"/>
+        <script src="http://code.jquery.com/jquery-1.12.3.min.js"></script>
+        <script src="http://static.geetest.com/static/tools/gt.js"></script>
+    </head>
+    <body>
+        <div id="index_top">
+            <div class="center">
+                <div id="index_logo">
+                    <img width="48" height="48" src="./images/logo.png"/>
+                    <div id="index_logo_text">
+                        <p style="font-size:16px;">大数据虚拟终端平台</p>
+                        <p style="font-size:12px;">Big Data Virtual Terminal Platform</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="index_login">
+            <div class="login_box">
+                <div class="login_notice">用户登录</div>
+                <input type="text" placeholder="请输入用户名" id="username"/>
+                <input type="password" placeholder="请输入密码" id="password"/>
+                <div id="captcha"></div>
+                <button class="btn" id="login">登 录</button>
+            </div>
+        </div>
+        <div id="index_intro"></div>
+        <div id="index_footer">
+            <p style="text-align:center;font-size:14px;color:#6F6F6F">Copyright © 2016-2017. All Rights Reserved.</p>
+        </div>
+    </body>
+    <script>
+        var handler = function (captchaObj){
+            captchaObj.appendTo("#captcha");
+            captchaObj.onSuccess(function (){
+                
+            });
+        };
+        $.ajax({
+            url: "./admin/api.php?api=getCaptcha&type=pc&rand="+Math.round(Math.random()*100),
+            type: "get",
+            dataType: "json",
+            success: function(data){
+                initGeetest({
+                    gt: data.gt,
+                    challenge: data.challenge,
+                    product: "embed",
+                    offline: !data.success
+                }, handler);
+            }
+        });
+    </script>
+</html>
