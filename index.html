@@ -44,12 +44,13 @@
             captchaObj.appendTo("#captcha");
             captchaObj.onSuccess(function (){
                 passCaptcha=captchaObj.getValidate();
-                console.log(passCaptcha);
             });
         };
         $("#login").on("click",function(){
+            passCaptcha.username=$("#username").val();
+            passCaptcha.password=$("#password").val();
             $.ajax({
-                url: "./admin/api.php?api=verifyLogin",
+                url: "./admin/api.php?api=login",
                 type: "post",
                 data:passCaptcha,
                 dataType: "json",
@@ -59,7 +60,7 @@
             });
         });
         $.ajax({
-            url: "./admin/api.php?api=getCaptcha&type=pc&rand="+Math.round(Math.random()*100),
+            url: "./admin/api.php?api=captcha&type=pc&rand="+Math.round(Math.random()*100),
             type: "get",
             dataType: "json",
             success: function(data){
