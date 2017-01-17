@@ -111,7 +111,24 @@ class User{
             $limit=getPermissionInfo($permission);
             $sql="INSERT INTO `user`(username,password,nickname,email,phone,permission,cpu,memory,process,process_time,space,db_space,net_upload,net_download,creattime) VALUES('".$username."','".md5(MD5_SALT.$password)."','".$profile['nickname']."','".$profile['email']."','".$profile['phone']."','".$permission."','".$limit['cpu']."','".$limit['memory']."','".$limit['process']."','".$limit['process_time']."','".$limit['space']."','".$limit['db_space']."','".$limit['upload']."','".$limit['download']."',NOW())";
             $result=$this->database->query($sql);
+            mkdir(ROOT_USERSPACE.$username);
+            $sql="CREATE DATABASE ".DATABASE_USER.$username;
+            $this->database->query($sql);
+            $sql="CREATE USER '".DATABASE_USER.$username."'@'localhost' IDENTIFIED BY '".$password."'";
+            $this->database->query($sql);
+            $sql="GRANT ALL ON ".DATABASE_USER.$username.".* TO '".DATABASE_USER.$username."'@'localhost'";
+            $this->database->query($sql);
         }
+    }
+    public function getUsage(){
+        $dir=ROOT_USERSPACE.$this->userInfo['username'];
+        $dir_mysql=ROOT_USERSPACE_MYSQL.DATABASE_USER.$this->userInfo['username'];
+        $size=getDirSize($dir);
+        $size_mysql=getDirSize($dir_mysql);
+        return array(
+            'space'=>array($dir,formatSizeUnit($size)),
+            'mysql'=>array($dir_mysql,formatSizeUnit($size_mysql)),
+        );
     }
     public function modifyLimit($id,$limit){
         if($this->userInfo['permission']>1){
@@ -143,6 +160,8 @@ class User{
         else{
             $sql="UPDATE `user` SET `password`='".md5(MD5_SALT.$password)."' WHERE `id`='".$id."'";
             $result=$this->database->query($sql);
+            $sql="SET PASSWORD FOR '".$this->userInfo['username']."'@'localhost' = PASSWORD('".$password."')";
+            $this->database->query($sql);
         }
     }
     public function editProfile($id,$profile){

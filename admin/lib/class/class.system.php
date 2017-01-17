@@ -1,6 +1,6 @@
 <?php
-#class System{
-    function getCpuInfo(){
+class System{
+    public function getCpuInfo(){
         if (false === ($str=@file("/proc/cpuinfo"))) return false;
         $str=implode("", $str);
         @preg_match_all("/model\s+name\s{0,}\:+\s{0,}([\w\s\)\(\@.-]+)([\r\n]+)/s", $str, $model);
@@ -22,7 +22,7 @@
         }
         return $res;
     }
-    function getCpuUsage(){
+    public function getCpuUsage(){
         $strtop=system("top -bn 1 |grep -E '^(%Cpu|Cpu)'");
         $strtop=substr($strtop,strpos($strtop,":")+1);
         echo $strtop;
@@ -38,7 +38,7 @@
         }
         return $cpuUse;
     }
-    function getProcess(){
+    public function getProcess(){
         $process=array();
         $data=array();
         $res = exec('ps aux',$data);
@@ -79,7 +79,13 @@
         }
         return $process;
     }
-    function getMemory(){
+    public function getSystemLoad(){
+        $uptimestr=exec("uptime");
+        $uptimestr=substr($uptimestr,strpos($uptimestr,"load average:")+13);
+        @preg_match_all("/([\d.]+)/", $uptimestr, $b);
+        return $b[0];
+    }
+    public function getMemory(){
         if (false === ($str=@file("/proc/meminfo"))) return false;
         $str=implode("", $str);
         preg_match_all("/MemTotal\s{0,}\:+\s{0,}([\d\.]+).+?MemFree\s{0,}\:+\s{0,}([\d\.]+).+?Cached\s{0,}\:+\s{0,}([\d\.]+).+?SwapTotal\s{0,}\:+\s{0,}([\d\.]+).+?SwapFree\s{0,}\:+\s{0,}([\d\.]+)/s", $str, $buf);
@@ -116,13 +122,34 @@
         
         return $res;
     }
-    function getSpace(){
+    public function getSpace(){
+        $size=@disk_free_space("/home");
+        return array($size,formatSizeUnit($size));
+    }
+    public function getNet(){
+        $net=array();
+        $netdata=@file("/proc/net/dev");
+        for($a=2;$a<count($netdata);$a++){
+            $name=trim(substr($netdata[$a],0,strpos($netdata[$a],":")));
+            $data=substr($netdata[$a],strpos($netdata[$a],":")+1);
+            @preg_match_all("/(\S+)/", $data, $b);
+            $temp=array(
+                'name'=>$name,
+                'receive'=>array(
+                    'bytes'=>$b[0][0],
+                    'packets'=>$b[0][1]
+                ),
+                'transmit'=>array(
+                    'bytes'=>$b[0][8],
+                    'packets'=>$b[0][9]
+                )
+            );
+            $net[]=$temp;
 
+        }
+        return $net;
     }
-    function getNet(){
-            
-    }
-    function formatSizeUnit($size,$o=0){
+    public function formatSizeUnit($size,$o=0){
         $unit=array(" B"," KB"," MB"," GB"," TB");
         $value=$size;
         $a=$o;
@@ -131,18 +158,31 @@
         }
         return round($value,2).$unit[$a];
     }
-//print_r(getCpuUsage());
-
-#}
-
-$net=@file("/proc/net/dev");
-for($a=2;$a<count($net);$a++){
-    $type=substr($net[$a],0,strpos($net[$a],":"));
-    $data=substr($net[$a],strpos($net[$a],":")+1);
-    @preg_match_all("/(\S+)/", $data, $b);
-    print_r($b[0]);
+    public function getNetSpeed(){
+        $old=getNet();
+        $d_time=1;
+        sleep($d_time);
+        $net=getNet();
+        $speed=array();
+        for($a=0;$a<count($net);$a++){
+            for($b=0;$b<count($old);$b++){
+                if($net[$a]['name']==$old[$b]['name']){
+                    $d_upload=$net[$a]['transmit']['bytes']-$old[$b]['transmit']['bytes'];
+                    $d_download=$net[$a]['receive']['bytes']-$old[$b]['receive']['bytes'];
+                    if($d_upload<0)$d_upload=0;
+                    if($d_download<0)$d_download=0;
+                    
+                    $speed[]=array(
+                        'name'=>$net[$a]['name'],
+                        'download'=>formatSizeUnit($d_download/$d_time,0)."/s",
+                        'upload'=>formatSizeUnit($d_upload/$d_time,0)."/s",
+                    );
+                    break;
+                }
+            }
+        }
+        return $speed;
+    }
 }
-
-//print_r($net);
 
 ?>

@@ -81,4 +81,21 @@ function formatSizeUnit($size,$o=0){
     }
     return round($value,2).$unit[$a];
 }
+function getDirSize($dir){ 
+    $handle = @opendir($dir);
+    $sizeResult=0;
+    while (false!==($FolderOrFile = @readdir($handle))){
+        if($FolderOrFile != "." && $FolderOrFile != ".."){
+            $new=$dir."/".$FolderOrFile;
+            if(is_dir($new)){ 
+                if(!is_link($new))$sizeResult += getDirSize($new); 
+            }
+            else{ 
+                $sizeResult += @filesize($new); 
+            }
+        }
+    }
+    closedir($handle);
+    return $sizeResult;
+}
 ?>

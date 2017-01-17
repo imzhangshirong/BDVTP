@@ -17,6 +17,9 @@ define("ROOT_LIB", ROOT.'lib/');
 define("ROOT_MODULE", ROOT.'lib/module/');
 define("ROOT_API", ROOT.'api/');
 define("ROOT_USER_HEADER", ROOT.'static/header/');
+define("ROOT_USERSPACE","/home/BDVTP/");
+define("ROOT_USERSPACE_MYSQL","/var/lib/mysql/");
+define("DATABASE_USER","BDVTP_");
 
 define("PATH_USER_HEADER", "./static/header/");
 define("PATH_CSS", "../css/");
