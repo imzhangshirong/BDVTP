@@ -2,7 +2,7 @@
 class DataBase{
     public $mysqli;
     public function __construct() {
-        $this->mysqli=new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_DATABASE);
+        $this->mysqli=new mysqli(MYSQL_HOST,MYSQL_USERNAME,MYSQL_PASSWORD,MYSQL_DATABASE);
         if($this->mysqli->connection_errno){
             exitByError(-4,"数据库错误：连接数据库失败");
         }

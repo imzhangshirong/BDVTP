@@ -72,4 +72,13 @@ function checkPOST($array){
     }
     return $all==0;
 }
+function formatSizeUnit($size,$o=0){
+    $unit=array(" B"," KB"," MB"," GB"," TB");
+    $value=$size;
+    $a=$o;
+    for($a=$o;$value>=1024;$a++){
+        $value/=1024;
+    }
+    return round($value,2).$unit[$a];
+}
 ?>
