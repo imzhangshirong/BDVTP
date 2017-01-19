@@ -98,4 +98,112 @@ function getDirSize($dir){
     closedir($handle);
     return $sizeResult;
 }
+function checkValueType($data,$errormsg,$replaceMode=false){
+    $data_re=array();
+    foreach($data as $key=>$check){
+        $type=@$check[0];
+        $value=trim(@$check[1]);
+        switch($type){
+            case "email":
+                if(!@preg_match("/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/",$value)){
+                    $check[2]=false;
+                    if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);
+                }
+                else{
+                    $check[2]=true;
+                }
+                break;
+            case "phone":
+                if(!@preg_match("/^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/",$value)){
+                    $check[2]=false;
+                    if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);
+                }
+                else{
+                    $check[2]=true;
+                }
+                break;
+            case "int":
+                if(!@preg_match("/^-?[1-9]\d*$/",$value)){
+                    $check[2]=false;
+                    if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);
+                }
+                else{
+                    $check[2]=true;
+                }
+                break;
+            case "-int":
+                if(!@preg_match("/^-[1-9]\d*$/",$value)){
+                    $check[2]=false;
+                    if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);
+                }
+                else{
+                    $check[2]=true;
+                }
+                break;
+            case "+int":
+                if(!@preg_match("/^[1-9]\d*$/",$value)){
+                    $check[2]=false;
+                    if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);
+                }
+                else{
+                    $check[2]=true;
+                }
+                break;
+            case "float":
+                if(!@preg_match("/^[-]?[1-9]\d*[\.]?\d*|0[\.]?\d*[1-9]\d*$/",$value)){
+                    $check[2]=false;
+                    if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);
+                }
+                else{
+                    $check[2]=true;
+                }
+                break;
+            case "+float":
+                if(!@preg_match("/^[1-9]\d*[\.]?\d*|0[\.]?\d*[1-9]\d*$/",$value)){
+                    $check[2]=false;
+                    if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);
+                }
+                else{
+                    $check[2]=true;
+                }
+                break;
+            case "-float":
+                if(!@preg_match("/^[-][1-9]\d*[\.]?\d*|0[\.]?\d*[1-9]\d*$/",$value)){
+                    $check[2]=false;
+                    if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);
+                }
+                else{
+                    $check[2]=true;
+                }
+                break;
+            case "letter+number":
+                if(!@preg_match("/(^[a-zA-Z0-9]*$)/",$value)){
+                    $check[2]=false;
+                    if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);
+                }
+                else{
+                    $check[2]=true;
+                }
+                break;
+            case "legalString":
+                if(!@preg_match("/(^[a-zA-Z0-9\x{4E00}-\x{9FA5}]*$)/u",$value)){
+                    $check[2]=false;
+                    
+                    if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);
+                }
+                else{
+                    $check[2]=true;
+                }
+                break;
+        }
+        $check[1]=$value;
+        if($replaceMode){
+            $data_re[$key]=$value;
+        }
+        else{
+            $data_re[$key]=$check;
+        }
+    }
+    return $data_re;
+}
 ?>

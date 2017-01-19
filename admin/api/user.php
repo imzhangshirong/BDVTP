@@ -4,53 +4,102 @@ $user=new User();
 if(!$user->isLogin)exitByError(5,"未登录，禁止进行操作");
 if(checkGET(array("action","sid"))){
     $sid=$_GET['sid'];
-    if($_GET['action']=="add"){
-        if(checkPOST(array("username","password","permission","nickname","email","phone"))){
-            $profile=array(
-                'nickname'=>$_POST['nickname'],
-                'email'=>$_POST['email'],
-                'phone'=>$_POST['phone'],
-            );
-            $user.add($_POST['username'],$_POST['password'],$profile,$_POST['permission']);
-            successByMsg("创建用户成功");
-        }
-    }
-    else if($_GET['action']=="edit"){
-        if(checkPOST(array("nickname","email","phone"))){
-            $profile=array(
-                'nickname'=>$_POST['nickname'],
-                'email'=>$_POST['email'],
-                'phone'=>$_POST['phone'],
-            );
-            $user.editProfile($sid,$profile);
-            successByMsg("修改用户成功");
-        }
-    }
-    else if($_GET['action']=="modifyPass"){
-        if(checkPOST(array("password"))){
-            $user.modifyPassword($sid,$_POST['password']);
-            successByMsg("修改用户密码成功");
-        }
-    }
-    else if($_GET['action']=="modifyLimit"){
-        if(checkPOST(array("cpu","memory","space","db_space","upload","download","process","process_time"))){
-            $limit=array(
-                'cpu'=>$_POST['cpu'],
-                'memory'=>$_POST['memory'],
-                'space'=>$_POST['space'],
-                'db_space'=>$_POST['db_space'],
-                'upload'=>$_POST['upload'],
-                'download'=>$_POST['download'],
-                'process'=>$_POST['process'],
-                'process_time'=>$_POST['process_time'],
-            );
-            $user.modifyLimit($sid,$limit);
-            successByMsg("修改用户配额成功");
-        }
-    }
-    else if($_GET['action']=="delete"){
-        $user->delete($sid);
-        successByMsg("删除用户成功");
+    switch($_GET['action']){
+        case "add":
+            if(checkPOST(array("username","password","permission","nickname","email","phone"))){
+                $data=array(
+                    'username'=>array('letter+number',$_POST['username']),
+                    'permission'=>array('+int',$_POST['permission']),
+                    'nickname'=>array('legalString',$_POST['nickname']),
+                    'email'=>array('email',$_POST['email']),
+                    'phone'=>array('phone',$_POST['phone']),
+                );
+                $error=array(
+                    'username'=>array(-6,"用户名包含特殊字符"),
+                    'permission'=>array(-6,"权限错误"),
+                    'nickname'=>array(-6,"昵称包含特殊字符"),
+                    'email'=>array(-6,"邮箱格式错误"),
+                    'phone'=>array(-6,"手机号格式错误"),
+                );
+                $data=checkValueType($data,$error,true);
+                $profile=array(
+                    'nickname'=>$data['nickname'],
+                    'email'=>$data['email'],
+                    'phone'=>$data['phone'],
+                );
+                $user.add($data['username'],$_POST['password'],$profile,$data['permission']);
+                successByMsg("创建用户成功");
+            }
+            break;
+        case "edit":
+            if(checkPOST(array("nickname","email","phone"))){
+                $data=array(
+                    'nickname'=>array('legalString',$_POST['nickname']),
+                    'email'=>array('email',$_POST['email']),
+                    'phone'=>array('phone',$_POST['phone']),
+                );
+                $error=array(
+                    'nickname'=>array(-6,"昵称包含特殊字符"),
+                    'email'=>array(-6,"邮箱格式错误"),
+                    'phone'=>array(-6,"手机号格式错误"),
+                );
+                $data=checkValueType($data,$error,true);
+                $profile=array(
+                    'nickname'=>$data['nickname'],
+                    'email'=>$data['email'],
+                    'phone'=>$data['phone'],
+                );
+                $user.editProfile($sid,$profile);
+                successByMsg("修改用户成功");
+            }
+            break;
+        case "modifyPass":
+            if(checkPOST(array("password"))){
+                $user.modifyPassword($sid,$_POST['password']);
+                successByMsg("修改用户密码成功");
+            }
+            break;
+        case "modifyLimit":
+            if(checkPOST(array("cpu","memory","space","db_space","upload","download","process","process_time"))){
+                $data=array(
+                    'cpu'=>array('+float',$_POST['cpu']),
+                    'memory'=>array('+float',$_POST['memory']),
+                    'space'=>array('+float',$_POST['space']),
+                    'db_space'=>array('+float',$_POST['db_space']),
+                    'upload'=>array('+float',$_POST['upload']),
+                    'download'=>array('+float',$_POST['download']),
+                    'process'=>array('+int',$_POST['process']),
+                    'process_time'=>array('+int',$_POST['process_time']),
+                );
+                $error=array(
+                    'cpu'=>array(-6,"cpu数值错误"),
+                    'memory'=>array(-6,"内存数值错误"),
+                    'space'=>array(-6,"存储空间数值错误"),
+                    'db_space'=>array(-6,"数据库空间数值错误"),
+                    'upload'=>array(-6,"上传速度数值错误"),
+                    'download'=>array(-6,"下载速度数值错误"),
+                    'process'=>array(-6,"进程（任务）数值错误"),
+                    'process_time'=>array(-6,"进程（任务）时间数值错误"),
+                );
+                $data=checkValueType($data,$error,true);
+                $limit=array(
+                    'cpu'=>$data['cpu'],
+                    'memory'=>$data['memory'],
+                    'space'=>$data['space'],
+                    'db_space'=>$data['db_space'],
+                    'upload'=>$data['upload'],
+                    'download'=>$data['download'],
+                    'process'=>$data['process'],
+                    'process_time'=>$data['process_time'],
+                );
+                $user.modifyLimit($sid,$limit);
+                successByMsg("修改用户配额成功");
+            }
+            break;
+        case "delete":
+            $user->delete($sid);
+            successByMsg("删除用户成功");
+            break;
     }
     exitByError(72,"未知操作");
 }

@@ -29,9 +29,15 @@ exitByError(65535,"缺失参数");
 
 function login(){
     loadModule("user");
-    $username=$_POST['username'];
     $password=$_POST['password'];
-    $user=new User(0,$username);
+    $data=array(
+        'username'=>array('letter+number',$_POST['username']),
+    );
+    $error=array(
+        'username'=>array(-6,"用户名非法"),
+    );
+    $data=checkValueType($data,$error,true);
+    $user=new User(0,$data['username']);
     $user->login($password);
     successByMsg("登录成功");
 }

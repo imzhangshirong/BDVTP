@@ -11,10 +11,10 @@ class System{
         if (false !== is_array($model[1])){
             for($i=0; $i < sizeof($model[1]); $i++){
                 $temp=array();
-                $temp['model']=$model[1][$i];
-                $temp['mhz']=$mhz[1][$i];
-                $temp['cache']=$cache[1][$i];
-                $temp['bogomips']=$bogomips[1][$i];
+                $temp['model']=trim($model[1][$i],"\n\r ");
+                $temp['mhz']=trim($mhz[1][$i],"\n\r ");
+                $temp['cache']=trim($cache[1][$i],"\n\r ");
+                $temp['bogomips']=trim($bogomips[1][$i],"\n\r ");
                 $res[]=$temp;
 
             }
@@ -23,9 +23,8 @@ class System{
         return $res;
     }
     public function getCpuUsage(){
-        $strtop=system("top -bn 1 |grep -E '^(%Cpu|Cpu)'");
+        $strtop=exec("top -bn 1 |grep -E '^(%Cpu|Cpu)'");
         $strtop=substr($strtop,strpos($strtop,":")+1);
-        echo $strtop;
         $cpu=explode(",",$strtop);
         $n=count($cpu);
         $cpuUse=array();
@@ -108,23 +107,23 @@ class System{
         $res['realPercent']=(floatval($res['total'])!=0)?round($res['realUsed']/$res['total']*100,2):0; //真实内存使用率
         $res['cachedPercent']=(floatval($res['cached'])!=0)?round($res['cached']/$res['total']*100,2):0; //Cached内存使用率
 
-        $res['total']=array($res['total'],formatSizeUnit($res['total'],1));
-        $res['free']=array($res['free'],formatSizeUnit($res['free'],1));
-        $res['buffers']=array($res['buffers'],formatSizeUnit($res['buffers'],1));
-        $res['cached']=array($res['cached'],formatSizeUnit($res['cached'],1));
-        $res['used']=array($res['used'],formatSizeUnit($res['used'],1));
-        $res['realUsed']=array($res['realUsed'],formatSizeUnit($res['realUsed'],1));
-        $res['realFree']=array($res['realFree'],formatSizeUnit($res['realFree'],1));
-        $res['swapTotal']=array($res['swapTotal'],formatSizeUnit($res['swapTotal'],1));
-        $res['swapFree']=array($res['swapFree'],formatSizeUnit($res['swapFree'],1));
-        $res['swapUsed']=array($res['swapUsed'],formatSizeUnit($res['swapUsed'],1));
+        $res['total']=array($res['total']."",formatSizeUnit($res['total'],1));
+        $res['free']=array($res['free']."",formatSizeUnit($res['free'],1));
+        $res['buffers']=array($res['buffers']."",formatSizeUnit($res['buffers'],1));
+        $res['cached']=array($res['cached']."",formatSizeUnit($res['cached'],1));
+        $res['used']=array($res['used']."",formatSizeUnit($res['used'],1));
+        $res['realUsed']=array($res['realUsed']."",formatSizeUnit($res['realUsed'],1));
+        $res['realFree']=array($res['realFree']."",formatSizeUnit($res['realFree'],1));
+        $res['swapTotal']=array($res['swapTotal']."",formatSizeUnit($res['swapTotal'],1));
+        $res['swapFree']=array($res['swapFree']."",formatSizeUnit($res['swapFree'],1));
+        $res['swapUsed']=array($res['swapUsed']."",formatSizeUnit($res['swapUsed'],1));
         
         
         return $res;
     }
     public function getSpace(){
         $size=@disk_free_space("/home");
-        return array($size,formatSizeUnit($size));
+        return array($size."",formatSizeUnit($size));
     }
     public function getNet(){
         $net=array();
@@ -159,10 +158,10 @@ class System{
         return round($value,2).$unit[$a];
     }
     public function getNetSpeed(){
-        $old=getNet();
+        $old=$this->getNet();
         $d_time=1;
         sleep($d_time);
-        $net=getNet();
+        $net=$this->getNet();
         $speed=array();
         for($a=0;$a<count($net);$a++){
             for($b=0;$b<count($old);$b++){
