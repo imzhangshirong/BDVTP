@@ -12,7 +12,8 @@ class System{
             for($i=0; $i < sizeof($model[1]); $i++){
                 $temp=array();
                 $temp['model']=trim($model[1][$i],"\n\r ");
-                $temp['mhz']=trim($mhz[1][$i],"\n\r ");
+                $temp['mhz']=floatval(trim($mhz[1][$i],"\n\r "));
+                
                 $temp['cache']=trim($cache[1][$i],"\n\r ");
                 $temp['bogomips']=trim($bogomips[1][$i],"\n\r ");
                 $res[]=$temp;
@@ -22,20 +23,46 @@ class System{
         }
         return $res;
     }
-    public function getCpuUsage(){
-        $strtop=exec("top -bn 1 |grep -E '^(%Cpu|Cpu)'");
-        $strtop=substr($strtop,strpos($strtop,":")+1);
-        $cpu=explode(",",$strtop);
-        $n=count($cpu);
-        $cpuUse=array();
-        for($a=0;$a<$n;$a++){
-            $cpu[$a]=trim($cpu[$a]);
-            $p=strpos($cpu[$a]," ");
-            $type=substr($cpu[$a],$p+1);
-            $value=substr($cpu[$a],0,$p);
-            $cpuUse[$type]=$value;
+
+    function GetCoreInformation() {
+        $data = @file('/proc/stat');
+        $cores = array();
+        foreach( $data as $line ) {
+            if( preg_match('/^cpu[0-9]/', $line) ){
+                $info = explode(' ', $line);
+                $cores[]=array(
+                    'user'=>$info[1],
+                    'nice'=>$info[2],
+                    'sys' => $info[3],
+                    'idle'=>$info[4],
+                    'iowait'=>$info[5],
+                    'irq' => $info[6],
+                    'softirq' => $info[7]
+                );
+            }
         }
-        return $cpuUse;
+        return $cores;
+    }
+    public function getCpuUsage(){
+        $stat1 = $this->GetCoreInformation();
+        sleep(1);
+        $stat2 = $this->GetCoreInformation();
+        $cpus=array();
+        for( $i = 0, $l = count($stat1); $i < $l; $i++) {
+            $dif = array();
+            $dif['user'] = $stat2[$i]['user'] - $stat1[$i]['user'];
+            $dif['nice'] = $stat2[$i]['nice'] - $stat1[$i]['nice'];
+            $dif['sys'] = $stat2[$i]['sys'] - $stat1[$i]['sys'];
+            $dif['idle'] = $stat2[$i]['idle'] - $stat1[$i]['idle'];
+            $dif['iowait'] = $stat2[$i]['iowait'] - $stat1[$i]['iowait'];
+            $dif['irq'] = $stat2[$i]['irq'] - $stat1[$i]['irq'];
+            $dif['softirq'] = $stat2[$i]['softirq'] - $stat1[$i]['softirq'];
+            $total = array_sum($dif);
+            $cpu = array();
+            foreach($dif as $x=>$y) $cpu[$x] = round($y / $total * 100, 2);
+            $cpus[] = $cpu;
+        }
+        return $cpus;
     }
     public function getProcess(){
         $process=array();
@@ -122,8 +149,15 @@ class System{
         return $res;
     }
     public function getSpace(){
-        $size=@disk_free_space("/home");
-        return array($size."",formatSizeUnit($size));
+        $sizeTotal=@disk_total_space("/home");
+        $sizeFree=@disk_free_space("/home");
+        $sizeUsed=$sizeTotal-$sizeFree;
+        return array(
+            'total'=>array($sizeTotal."",formatSizeUnit($sizeTotal)),
+            'free'=>array($sizeFree."",formatSizeUnit($sizeFree)),
+            'used'=>array($sizeUsed."",formatSizeUnit($sizeUsed)),
+            'percent'=>round($sizeUsed/$sizeTotal*100,2)
+        );
     }
     public function getNet(){
         $net=array();

@@ -6,6 +6,12 @@ loadModule("overview");
 $overview=new Overview();
 if(checkGET(array("action"))){
     switch($_GET['action']){
+        case "all":
+            successByData("获取成功",$overview->getAll());
+            break;
+        case "cpu":
+            successByData("获取成功",$overview->getCpu());
+            break;
         case "cpuUsage":
             successByData("获取成功",$overview->getCpuUsage());
             break;

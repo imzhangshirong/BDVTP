@@ -101,17 +101,20 @@
     position: absolute;
     left: 0px;
     top: 0px;
+    z-index: 1;
 }
 #admin_panel_operation{
     left: 0px;
     top: 0px;
     min-height: 500px;
-    margin-left:240px;
+    padding-left:240px;
     position: absolute;
+    width:100%;
 }
 #admin_panel_menu .admin_click::before{
     background-color:rgba(65, 160, 221,0.8);
 }
+
 .menu{
     width: 100%;
     height: 60px;
@@ -141,4 +144,129 @@
 }
 .menu:hover{
     color: #FFF;
+}
+
+#admin_panel_operation>div{
+    padding: 20px;
+}
+
+.title{
+    color:#3e3e3e;
+}
+.titlebig0{
+    font-size: 32px;
+    margin-right:5px;
+}
+.titlebig1{
+    font-size: 30px;
+    margin-right:5px;
+}
+.title0{
+    font-size: 24px;
+    margin-right:5px;
+}
+.title1{
+    font-size: 20px;
+    margin-right:5px;
+}
+.title2{
+    font-size: 18px;
+    margin-right:5px;
+}
+.title3{
+    font-size: 16px;
+    margin-right:5px;
+}
+.title4{
+    font-weight: 700;
+    font-size: 14px;
+    margin-right:5px;
+}
+.title5{
+    font-weight: 700;
+    font-size: 12px;
+    margin-right:5px;
+}
+.text{
+    color:#3e3e3e;
+}
+.titlep0{
+    font-size: 14px;
+}
+.titlep1{
+    font-size: 12px;
+}
+#admin_panel_operation p{
+    
+}
+
+
+
+
+
+
+
+/**
+overview部分
+*/
+
+
+.cpu_core{
+    display: inline-block;
+    padding: 8px;
+    background-color: #55ab80;
+    margin: 4px;
+    font-size: 0px;
+}
+.cpu_core>div{
+    display: inline-block;
+}
+.cpu_core>div:first-of-type{
+    min-width: 120px;
+    float: left;
+    margin-right: 16px;
+}
+.cpu_core>div:nth-of-type(2){
+    float: left;
+}
+.cpu_core>.title{
+    margin-bottom: 10px;
+}
+.cpu_core p{
+    color:#FFF;
+}
+#overview_cpu>div{
+}
+#overview_cpu>.graph{
+    height: 100px;
+    margin:10px;
+}
+#overview_cpu>.status{
+    margin-left:20px;
+    margin-bottom:20px;
+}
+#overview_memory{
+    margin-bottom: 20px;
+}
+#overview_memory>.graph:nth-of-type(1){
+    height: 250px;
+    width: 250px;
+    display: inline-block;
+    margin-left:20px;
+}
+#overview_memory>.graph:nth-of-type(2){
+    height: 200px;
+    width: 200px;
+    display: inline-block;
+}
+#overview_space{
+    margin-left:20px;
+}
+#overview_space>.graph{
+    height: 250px;
+    width: 420px;
+}
+.overview_hori{
+    display: inline-block;
+    vertical-align: top;
 }

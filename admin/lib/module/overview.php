@@ -4,6 +4,12 @@ class Overview{
     public function __construct(){
         $this->system=new System();
     }
+    public function getCpu(){
+        return array(
+            'info'=>$this->system->getCpuInfo(),
+            'usage'=>$this->system->getCpuUsage(),            
+        );
+    }
     public function getCpuInfo(){
         return $this->system->getCpuInfo();
     }
@@ -27,6 +33,14 @@ class Overview{
     }
     public function getNetSpeed(){
         return $this->system->getNetSpeed();
+    }
+    public function getAll(){
+        return array(
+            'cpu'=>$this->getCpu(),         
+            'memory'=>$this->getMemory(),         
+            'net'=>$this->getNet(),         
+            'net_speed'=>$this->getNetSpeed(),         
+        );
     }
 }
 ?>
