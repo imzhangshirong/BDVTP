@@ -1,3 +1,7 @@
+
+body{
+    background-color: #efefef;
+}
 #admin_person{
     float: right;
     height: 100%;
@@ -107,8 +111,8 @@
     left: 0px;
     top: 0px;
     min-height: 500px;
-    padding-left:240px;
-    width:100%;
+    margin-left:240px;
+    background-color: #fff;
 }
 #admin_panel_menu .admin_click::before{
     background-color:rgba(65, 160, 221,0.8);
