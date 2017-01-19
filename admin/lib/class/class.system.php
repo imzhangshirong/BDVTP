@@ -204,11 +204,12 @@ class System{
                     $d_download=$net[$a]['receive']['bytes']-$old[$b]['receive']['bytes'];
                     if($d_upload<0)$d_upload=0;
                     if($d_download<0)$d_download=0;
-                    
+                    $download=$d_download/$d_time;
+                    $upload=$d_upload/$d_time;                    
                     $speed[]=array(
                         'name'=>$net[$a]['name'],
-                        'download'=>formatSizeUnit($d_download/$d_time,0)."/s",
-                        'upload'=>formatSizeUnit($d_upload/$d_time,0)."/s",
+                        'download'=>array($download,formatSizeUnit($download,0)."/s"),
+                        'upload'=>array($upload,formatSizeUnit($upload,0)."/s"),
                     );
                     break;
                 }

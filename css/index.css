@@ -13,12 +13,12 @@ body{
 .center{
     position: relative;
     width:1210px;
-    padding: 0px 20px;
 }
 #index_top{
     position: relative;
     background-color: #111111;
     height: 80px;
+    padding: 0px 20px;
 }
 #index_top>.center{
     height: 100%;
