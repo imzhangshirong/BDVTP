@@ -1,9 +1,9 @@
 <?php
+header('Content-Type: application/json; charset=utf-8');
 loadModule("user");
 $user=new User();
 if(!$user->isLogin)exitByError(5,"未登录，禁止进行操作");
-if(checkGET(array("action","sid"))){
-    $sid=$_GET['sid'];
+if(checkGET(array("action"))){
     switch($_GET['action']){
         case "add":
             if(checkPOST(array("username","password","permission","nickname","email","phone"))){
@@ -32,6 +32,8 @@ if(checkGET(array("action","sid"))){
             }
             break;
         case "edit":
+            if(!checkGET(array("sid")))exitByError(65535,"缺失参数");
+            $sid=$_GET['sid'];
             if(checkPOST(array("nickname","email","phone"))){
                 $data=array(
                     'nickname'=>array('legalString',$_POST['nickname']),
@@ -54,12 +56,16 @@ if(checkGET(array("action","sid"))){
             }
             break;
         case "modifyPass":
+            if(!checkGET(array("sid")))exitByError(65535,"缺失参数");
+            $sid=$_GET['sid'];
             if(checkPOST(array("password"))){
                 $user.modifyPassword($sid,$_POST['password']);
                 successByMsg("修改用户密码成功");
             }
             break;
         case "modifyLimit":
+            if(!checkGET(array("sid")))exitByError(65535,"缺失参数");
+            $sid=$_GET['sid'];
             if(checkPOST(array("cpu","memory","space","db_space","upload","download","process","process_time"))){
                 $data=array(
                     'cpu'=>array('+float',$_POST['cpu']),
@@ -97,11 +103,19 @@ if(checkGET(array("action","sid"))){
             }
             break;
         case "delete":
+            if(!checkGET(array("sid")))exitByError(65535,"缺失参数");
+            $sid=$_GET['sid'];
             $user->delete($sid);
             successByMsg("删除用户成功");
             break;
+        case "logout":
+            $user->logout();
+            successByMsg("您已成功注销");
+            break;
+        default:
+            exitByError(72,"未知操作");
     }
-    exitByError(72,"未知操作");
+    
 }
 exitByError(65535,"缺失参数");
 ?>

@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json; charset=utf-8');
 session_start();
 if($_GET['type'] == 'pc'){
     $GtSdk = new GeetestLib(CAPTCHA_ID, PRIVATE_KEY);

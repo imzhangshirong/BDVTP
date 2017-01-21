@@ -57,6 +57,7 @@
                 dataType: "json",
                 success: function(data){
                     if(data.msg)alert(data.msg);
+                    if(data.code==0)window.location.href="./admin";
                 }
             });
         });

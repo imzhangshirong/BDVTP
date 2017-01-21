@@ -81,7 +81,7 @@ function formatSizeUnit($size,$o=0){
     }
     return round($value,2).$unit[$a];
 }
-function getDirSize($dir){ 
+function getDirSize($dir){
     $handle = @opendir($dir);
     $sizeResult=0;
     while (false!==($FolderOrFile = @readdir($handle))){
@@ -205,5 +205,9 @@ function checkValueType($data,$errormsg,$replaceMode=false){
         }
     }
     return $data_re;
+}
+function exitByErrorScript($msg,$redir){
+    if($redir)exit('<script>alert("'.$msg.'");window.location.href="'.$redir.'"</script>');
+    exit('<script>alert("'.$msg.'");</script>');
 }
 ?>

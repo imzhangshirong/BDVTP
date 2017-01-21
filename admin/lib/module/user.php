@@ -31,6 +31,7 @@ class User{
                 $this->userInfo=null;
             }
         }
+        if($this->userInfo)$this->userInfo['permissionInfo']=$this->getPermissionInfo();
     }
     public function getPermissionInfo($code_=-1){
         $code=$code_;
