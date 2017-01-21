@@ -44,15 +44,15 @@ if(!$action)$action="overview";
                             <span><?=$user->userInfo['permissionInfo']['name']?></span>
                         </div>
                     </div>
-                    <div id="admin_message" class="admin_person_button admin_click">
-                        <div class="iconfont icon-xiaoxi"></div>
+                    <div id="admin_message" title="消息" class="admin_person_button admin_click">
+                        <div class="iconfont icon-xiaoxi" title="消息"></div>
                         <span>51</span>
                     </div>
-                    <div id="admin_setting" class="admin_person_button admin_click">
-                        <div class="iconfont icon-shezhi"></div>
+                    <div id="admin_setting" title="个人设置" class="admin_person_button admin_click">
+                        <div class="iconfont icon-shezhi" title="个人设置"></div>
                     </div>
-                    <div id="admin_logout" class="admin_person_button admin_click">
-                        <div class="iconfont icon-tuichu"></div>
+                    <div id="admin_logout" title="退出" class="admin_person_button admin_click">
+                        <div class="iconfont icon-tuichu" title="退出"></div>
                     </div>
                 </div>
             </div>
