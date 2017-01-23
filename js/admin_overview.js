@@ -397,4 +397,4 @@ var timerNet=setInterval(function(){
         return;
     }
     updateNet();
-},3000);
+},2500);

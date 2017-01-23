@@ -17,14 +17,16 @@ if(!$action)$action="overview";
         <base href="../" />
         <title>大数据虚拟终端平台</title>
         <meta charset="utf-8"/>
-        <link rel="stylesheet" type="text/css" href="./css/iconfont.css?t=23"/>
-        <link rel="stylesheet" type="text/css" href="./css/index.css?t=12444"/>
-        <link rel="stylesheet" type="text/css" href="./css/admin.css?t=37154"/>
+        <link rel="stylesheet" type="text/css" href="./css/iconfont.css?t=<?=time()?>"/>
+        <link rel="stylesheet" type="text/css" href="./css/index.css?t=<?=time()?>"/>
+        <link rel="stylesheet" type="text/css" href="./css/admin.css?t=<?=time()?>"/>
+        <link rel="stylesheet" type="text/css" href="./css/selector.css?t=<?=time()?>"/>
         <script src="./js/echarts.js"></script>
         <script src="./js/jquery-1.11.3.min.js"></script>
         <!--script src="./js/react/react.js"></script>
         <script src="./js/react/react-dom.js"></script-->
-        <script src="./js/base.js"></script>
+        <script src="./js/base.js?t=<?=time()?>"></script>
+        <script src="./js/selector.js?t=<?=time()?>"></script>
     </head>
     <body>
         <div id="index_top">

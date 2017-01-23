@@ -2,6 +2,8 @@ var BDVTP={
     containerId:"admin_panel_operation",
     current:undefined,
     load:function(m){
+        var ele=document.getElementById(BDVTP.containerId);
+        ele.innerHTML='<div class="load"><div class="loader"></div><span>Loading...</span></div>';
         $.ajax({
             url:"./admin/api.php",
             type:"get",
@@ -10,7 +12,7 @@ var BDVTP={
                 action:m,
             },
             success:function(resp){
-                var ele=document.getElementById(BDVTP.containerId);
+                
                 if(!ele)return;
                 ele.innerHTML=resp;
                 var scripts=ele.getElementsByTagName("script");

@@ -1,0 +1,25 @@
+.selector{
+    position: relative;
+}
+.selector>.tablist{
+    border-bottom: 1px solid #efefef;
+}
+.selector>.tab{
+    box-sizing: border-box;
+    display: none;
+    padding: 10px;
+}
+.selector>.tab.selected{
+    display: block;
+}
+.selector>.tablist>span{
+    padding: 12px 16px;
+    font-size:18px;
+    min-width: 50px;
+    cursor: pointer;
+    display: inline-block;
+
+}
+.selector>.tablist>span.selected{
+    border-bottom:3px solid #41a0dd;
+}
