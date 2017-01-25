@@ -368,14 +368,20 @@ overview部分
 }
 .admin_list{
     line-height: 36px;
-    margin: 20px 0px;
+    
 }
 .admin_list td{
     border-bottom: 1px solid #efefef;
     color:#3e3e3e;
 }
 .admin_list th{
-    background-color:#f6f6f6;
+    background-color:#f9f9f9;
+}
+.admin_list tr:hover{
+    background-color:#f6fdff;
+}
+#task_list{
+    margin: 20px 0px;
 }
 .task_status{
     width: 12px;
@@ -383,7 +389,7 @@ overview部分
     border-radius: 50%;
     vertical-align: middle;
     display: inline-block;
-    margin: 0px 5px;
+    margin: 0px 12px 0px 4px;
     position: relative;
     top: -2px;
 }
@@ -391,8 +397,90 @@ overview部分
     background-color:#43b336;
 }
 .task_status.kill{
-    background-color:#cc1e1e;
+    background-color:#e44f4f;
 }
 .task_status.end{
     background-color:#aaa;
+}
+.task_ing_detail{
+    padding: 10px 5px 15px 5px;
+    border-bottom: 1px solid #efefef;
+    line-height: 1.5em;
+}
+.task_ing_detail .value{
+    min-width: 110px;
+}
+.task_ing_detail .label{
+    color:#666;
+}
+.task_ing_detail .operation{
+    float: right;
+}
+
+.task_ing_detail .operation .pause{
+}
+
+.task_ing_detail .operation .stop{
+    background-color: #db4b4b;
+}
+.task_ing_detail .operation .stop:hover{
+    background-color: #cc4444;
+}
+
+
+
+
+/*文件*/
+#file_path{
+    color: #FFF;
+    background-color: #79a3bb;
+    position: relative;
+}
+#file_path>.iconfont{
+    font-size: 24px;
+    padding: 6px 10px;
+    background-color: rgba(0,0,0,0.1);
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+}
+#file_path>#file_return{
+    left: 0px;
+}
+#file_path>#file_upload{
+    right: 0px;
+}
+#file_path>.iconfont:hover{
+    background-color: rgba(0,0,0,0.2);
+}
+#file_path>*{
+    line-height: 30px;
+    display: inline-block;
+    vertical-align: middle;
+}
+#file_path>input{
+    color: #FFF;
+    background-color: transparent;
+    border:none;
+    width: 880px;
+    position: relative;
+    margin-left: 50px;
+}
+#file_path>.operation{
+    width: 30px;
+    left: 10px;
+    position: absolute;
+    top:0px;
+}
+#file_list .iconfont{
+    margin:0px 10px 0px 15px;
+}
+#file_list .icon-folder{
+    color:#FFCC66;
+}
+#file_list .icon-wenjian{
+    color:#333333;
+}
+#file_list .operation .iconfont{
+    margin:0px 6px;
 }

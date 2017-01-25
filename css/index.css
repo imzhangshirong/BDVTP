@@ -74,32 +74,41 @@ body{
 }
 
 
-.login_box input{
+input{
     border:1px solid rgba(0,0,0,0.2);
     outline: none;
     border-radius: 2px;
+    padding: 0.5em 1em;
+    
+}
+
+.login_box input{
     width: 300px;
     font-size:16px;
-    line-height: 24px;
-    padding: 8px 12px;
     margin:10px 70px;
 }
-.login_box input:focus{
+
+input:focus{
     border:1px solid #00a2ff;
 }
 .login_box .btn{
+    font-size:16px;
+    width: 300px;
+    margin:10px 70px;
+}
+
+.btn{
     border-radius: 2px;
     background-color: #41a0dd;
     color:#FFF;
-    padding: 8px 12px;
+    padding: 0.5em 1em;
     border: none;
     outline: none;
-    font-size:16px;
-    width: 300px;
-    line-height: 24px;
-    margin:10px 70px;
 }
-.login_box .btn:hover{
+.inline{
+    display: inline-block;
+}
+.btn:hover{
     background-color: #3991ca;
 }
 #captcha{

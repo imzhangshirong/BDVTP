@@ -9,7 +9,7 @@ $user=new User();
 if(!$user->isLogin)exitByErrorScript("未登录，禁止进行操作","./");
 $action=@$_GET['action'];
 if(!apiIsLegal($api))$action="";
-if(!$action)$action="overview";
+if(!$action)$action="task";
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,17 +61,17 @@ if(!$action)$action="overview";
         </div>
         <div id="admin_panel" class="center">
             <div id="admin_panel_menu">
-                <div class="menu admin_click seleted" action="overview">
-                    <span class="iconfont icon-gaikuang"></span>
-                    <span>系统概况</span>
-                </div>
                 <div class="menu admin_click" action="task">
                     <span class="iconfont icon-renwu"></span>
                     <span>任务列表</span>
                 </div>
-                <div class="menu admin_click" action="result">
-                    <span class="iconfont icon-jieguo"></span>
-                    <span>结果详情</span>
+                <div class="menu admin_click" action="file">
+                    <span class="iconfont icon-file"></span>
+                    <span>我的空间</span>
+                </div>
+                <div class="menu admin_click" action="overview">
+                    <span class="iconfont icon-gaikuang"></span>
+                    <span>系统概况</span>
                 </div>
                 <div class="line"></div>
                 <div class="menu admin_click" action="help">
@@ -104,6 +104,7 @@ if(!$action)$action="overview";
                 BDVTP.current=undefined;
                 BDVTP.api({api:"user",action:"logout"},function(resp){window.location.href="./";alert(resp.msg)});
             });
+            $(".menu[action='<?=$action?>']").addClass("seleted");
             BDVTP.load("<?=$action?>");
         </script>
     </body>
