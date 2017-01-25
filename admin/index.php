@@ -6,7 +6,7 @@ loadConfig();
 loadClass();
 loadModule("user");
 $user=new User();
-if(!$user->isLogin)exitByErrorScript("未登录，禁止进行操作","./");
+if(!$user->isLogin)exitByErrorScript("未登录，禁止进行操作","../");
 $action=@$_GET['action'];
 if(!apiIsLegal($api))$action="";
 if(!$action)$action="task";
