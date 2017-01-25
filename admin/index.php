@@ -67,11 +67,11 @@ if(!$action)$action="overview";
                 </div>
                 <div class="menu admin_click" action="task">
                     <span class="iconfont icon-renwu"></span>
-                    <span>任务详情</span>
+                    <span>任务列表</span>
                 </div>
                 <div class="menu admin_click" action="result">
                     <span class="iconfont icon-jieguo"></span>
-                    <span>结果列表</span>
+                    <span>结果详情</span>
                 </div>
                 <div class="line"></div>
                 <div class="menu admin_click" action="help">

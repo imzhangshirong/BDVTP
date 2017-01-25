@@ -3,6 +3,7 @@ var BDVTP={
     current:undefined,
     load:function(m){
         var ele=document.getElementById(BDVTP.containerId);
+        BDVTP.current=m;
         ele.innerHTML='<div class="load"><div class="loader"></div><span>Loading...</span></div>';
         $.ajax({
             url:"./admin/api.php",
@@ -14,6 +15,7 @@ var BDVTP={
             success:function(resp){
                 
                 if(!ele)return;
+                if(BDVTP.current!=m)return;
                 ele.innerHTML=resp;
                 var scripts=ele.getElementsByTagName("script");
                 var scriptsNew=[];
@@ -28,7 +30,6 @@ var BDVTP={
                     ele.appendChild(scriptsNew[a]);
                     eval(scriptsNew[a].innerHTML);
                 }
-                BDVTP.current=m;
             }
         });
     },

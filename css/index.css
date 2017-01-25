@@ -4,6 +4,9 @@
     font-family: "微软雅黑",Microsoft YaHei,Arial, Helvetica, sans-serif;
     box-sizing: border-box;
 }
+div{
+    font-size: 14px;
+}
 button{
     cursor: pointer;
 }

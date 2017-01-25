@@ -19,8 +19,10 @@
     min-width: 50px;
     cursor: pointer;
     display: inline-block;
+    color:#5e5e5e;
 
 }
 .selector>.tablist>span.selected{
     border-bottom:3px solid #41a0dd;
+    color:#1e1e1e;
 }

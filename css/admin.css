@@ -148,6 +148,7 @@ body{
     position: relative;
     vertical-align: middle;
     padding: 3px;
+    font-size: inherit;
 }
 .menu:hover{
     color: #FFF;
@@ -157,8 +158,10 @@ body{
     padding: 20px;
 }
 
+
 .title{
     color:#3e3e3e;
+    font-size: 16px;
 }
 .titlebig0{
     font-size: 32px;
@@ -362,4 +365,34 @@ overview部分
     font-size: 16px;
     padding: 10px 0px;
     color:#999999;
+}
+.admin_list{
+    line-height: 36px;
+    margin: 20px 0px;
+}
+.admin_list td{
+    border-bottom: 1px solid #efefef;
+    color:#3e3e3e;
+}
+.admin_list th{
+    background-color:#f6f6f6;
+}
+.task_status{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0px 5px;
+    position: relative;
+    top: -2px;
+}
+.task_status.active{
+    background-color:#43b336;
+}
+.task_status.kill{
+    background-color:#cc1e1e;
+}
+.task_status.end{
+    background-color:#aaa;
 }

@@ -19,9 +19,23 @@
                     <p>可分配的任务</p>
                 </div>
             </div>
+            <div id="task_list" class="admin_list">
+                <table width="100%" cellspacing=0>
+                    <tr><th>序号</th><th>任务名称</th><th width="180">开始时间</th><th>状态</th></tr>
+                    <tr><td align="center">3</td><td><span class="task_status end"></span>147：方程求解</td><td align="center">2016-01-25 12:00</td><td>已结束</td></tr>
+                    <tr><td align="center">2</td><td><span class="task_status active"></span>146：网络爬虫抓取：www.baidu.com</td><td align="center">2016-01-25 11:45</td><td>进行中...</td></tr>
+                    <tr><td align="center">1</td><td><span class="task_status kill"></span>112：网络爬虫抓取：www.qq.com</td><td align="center">2016-01-24 10:13</td><td>中断：内存过大</td></tr>
+                </table>
+            </div>
         </div>
         <div class="tab" name="正执行任务">
-            <h1>Page2</h1>
+            <div id="task_ing_list">
+                <div class="task_ing_detail">
+                    <h2>147：方程求解</h2>
+                    <p><span>开始时间</span><span>2017-01-24 11:23</span><span>目前耗时</span><span>1小时10分</span><span>结束时间</span><span>未知</span></p>
+                    <p><span>方程详情</span><span>x1+x2+x3+x4+x5=0<br/>x1+x2+x3+x4-x5=1</span></p>
+                </div>
+            </div>
         </div>
         <div class="tab" name="已结束任务"></div>
     </div>
