@@ -484,3 +484,41 @@ overview部分
 #file_list .operation .iconfont{
     margin:0px 6px;
 }
+
+
+/*用户*/
+#user_header{
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    background-color:#ddd ;
+    border: none;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 20px auto;
+    cursor: pointer;
+}
+.user_data{
+    color: #3c3c3c; 
+    font-weight: 400;
+}
+.user_limit .user_data{
+    width: 100px;
+}
+.user_limit .user_data_label{
+    width:100px;
+}
+.user_data_label{
+    color: #9c9c9c; 
+    padding-right: 16px;
+}
+.user_table td{
+    height: 36px;
+}
+#user_modify_button{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    width: 200px;
+}

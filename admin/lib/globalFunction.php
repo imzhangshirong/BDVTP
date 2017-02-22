@@ -186,7 +186,7 @@ function checkValueType($data,$errormsg,$replaceMode=false){
                 }
                 break;
             case "legalString":
-                if(!@preg_match("/(^[a-zA-Z0-9\x{4E00}-\x{9FA5}]*$)/u",$value)){
+                if(!@preg_match("/(^[a-zA-Z _0-9\x{4E00}-\x{9FA5}]*$)/u",$value)){
                     $check[2]=false;
                     
                     if(isset($errormsg[$key]))exitByError($errormsg[$key][0],$errormsg[$key][1]);

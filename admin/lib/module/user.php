@@ -26,12 +26,23 @@ class User{
             $this->userInfo=$_SESSION['user'];
             if($this->userInfo['id'] && $this->userInfo['username']){
                 $this->isLogin=true;
+                if($_SESSION["update"]){
+                    $sql="SELECT * FROM `user` WHERE `id`='".$this->userInfo['id']."'";
+                    $result=$this->database->query($sql);
+                    if($result->num_rows>0){
+                        $this->userInfo=($this->database->fetchAll($result,MYSQLI_ASSOC))[0];
+                    }
+                }
             }
             else{
                 $this->userInfo=null;
             }
         }
         if($this->userInfo)$this->userInfo['permissionInfo']=$this->getPermissionInfo();
+        if($_SESSION["update"]){
+            $_SESSION['user']=$this->userInfo;
+            $_SESSION["update"];
+        }
     }
     public function getPermissionInfo($code_=-1){
         $code=$code_;
@@ -41,6 +52,7 @@ class User{
             'download'=>0,
             'upload'=>0,
             'space'=>0,
+            'task'=>0,
             'process'=>0,
             'db_space'=>0,
             'process_time'=>0,
@@ -56,6 +68,7 @@ class User{
                 $re['download']=LIMIT_DOWNLOAD_ADMIN;
                 $re['upload']=LIMIT_UPLOAD_ADMIN;
                 $re['space']=LIMIT_SPACE_ADMIN;
+                $re['task']=LIMIT_TASK_ADMIN;
                 $re['process']=LIMIT_PROCS_ADMIN;
                 $re['db_space']=LIMIT_DBSPACE_ADMIN;
                 $re['process_time']=LIMIT_PROCTIME_ADMIN;
@@ -67,6 +80,7 @@ class User{
                 $re['download']=LIMIT_DOWNLOAD_MANAGER;
                 $re['upload']=LIMIT_UPLOAD_MANAGER;
                 $re['space']=LIMIT_SPACE_MANAGER;
+                $re['task']=LIMIT_TASK_MANAGER;
                 $re['process']=LIMIT_PROCS_MANAGER;
                 $re['db_space']=LIMIT_DBSPACE_MANAGER;
                 $re['process_time']=LIMIT_PROCTIME_MANAGER;
@@ -77,6 +91,7 @@ class User{
                 $re['memory']=LIMIT_RAM_USER;
                 $re['download']=LIMIT_DOWNLOAD_USER;
                 $re['upload']=LIMIT_UPLOAD_USER;
+                $re['task']=LIMIT_TASK_USER;
                 $re['space']=LIMIT_SPACE_USER;
                 $re['process']=LIMIT_PROCS_USER;
                 $re['db_space']=LIMIT_DBSPACE_USER;
@@ -87,6 +102,7 @@ class User{
         if($code<0 && $this->userInfo){
             $re['cpu']=$this->userInfo['cpu'];
             $re['memory']=$this->userInfo['memory'];
+            $re['task']=$this->userInfo['task'];
             $re['download']=$this->userInfo['net_download'];
             $re['upload']=$this->userInfo['net_upload'];
             $re['space']=$this->userInfo['space'];
@@ -110,7 +126,7 @@ class User{
         }
         else{
             $limit=getPermissionInfo($permission);
-            $sql="INSERT INTO `user`(username,password,nickname,email,phone,permission,cpu,memory,process,process_time,space,db_space,net_upload,net_download,creattime) VALUES('".$username."','".md5(MD5_SALT.$password)."','".$profile['nickname']."','".$profile['email']."','".$profile['phone']."','".$permission."','".$limit['cpu']."','".$limit['memory']."','".$limit['process']."','".$limit['process_time']."','".$limit['space']."','".$limit['db_space']."','".$limit['upload']."','".$limit['download']."',NOW())";
+            $sql="INSERT INTO `user`(username,password,nickname,email,phone,permission,cpu,memory,task,process,process_time,space,db_space,net_upload,net_download,creattime) VALUES('".$username."','".md5(MD5_SALT.$password)."','".$profile['nickname']."','".$profile['email']."','".$profile['phone']."','".$permission."','".$limit['cpu']."','".$limit['memory']."','".$limit['task']."','".$limit['process']."','".$limit['process_time']."','".$limit['space']."','".$limit['db_space']."','".$limit['upload']."','".$limit['download']."',NOW())";
             $result=$this->database->query($sql);
             mkdir(ROOT_USERSPACE.$username);
             $sql="CREATE DATABASE ".DATABASE_USER.$username;
@@ -141,12 +157,13 @@ class User{
                 exitByError(64,"无权限进行操作");
             }
             $limitMax=getPermissionInfo($this->userInfo['permission']);
-            if($limit['cpu']>$limitMax['cpu']||$limit['memory']>$limitMax['memory']||$limit['process']>$limitMax['process']||$limit['space']>$limitMax['space']||$limit['db_space']>$limitMax['db_space']||$limit['upload']>$limitMax['upload']||$limit['download']>$limitMax['download']||$limit['process_time']>$limitMax['process_time']){
+            if($limit['cpu']>$limitMax['cpu']||$limit['memory']>$limitMax['memory']||$limit['process']>$limitMax['process']||$limit['space']>$limitMax['space']||$limit['db_space']>$limitMax['db_space']||$limit['upload']>$limitMax['upload']||$limit['download']>$limitMax['download']||$limit['process_time']>$limitMax['process_time']||$limit['task']>$limitMax['task']){
                 exitByError(4,"超出可设置的最大值");
             }
             else{
-                $sql="UPDATE `user` SET `cpu`='".$limit['cpu']."',`memory`='".$limit['memory']."',`process`='".$limit['process']."',`space`='".$limit['space']."',`db_space`='".$limit['db_space']."',`net_upload`='".$limit['upload']."',`net_download`='".$limit['download']."',`process_time`='".$limit['process_time']."' WHERE `id`='".$id."'";
+                $sql="UPDATE `user` SET `cpu`='".$limit['cpu']."',`memory`='".$limit['memory']."',`process`='".$limit['process']."',`space`='".$limit['space'].",`task`='".$limit['task']."',`db_space`='".$limit['db_space']."',`net_upload`='".$limit['upload']."',`net_download`='".$limit['download']."',`process_time`='".$limit['process_time']."' WHERE `id`='".$id."'";
                 $result=$this->database->query($sql);
+                $_SESSION["update"]=true;
             }
         }
     }
@@ -161,9 +178,30 @@ class User{
         else{
             $sql="UPDATE `user` SET `password`='".md5(MD5_SALT.$password)."' WHERE `id`='".$id."'";
             $result=$this->database->query($sql);
-            $sql="SET PASSWORD FOR '".$this->userInfo['username']."'@'localhost' = PASSWORD('".$password."')";
+            $sql="SET PASSWORD FOR '".DATABASE_USER.$this->userInfo['username']."'@'localhost' = PASSWORD('".$password."')";
             $this->database->query($sql);
+            $_SESSION["update"]=true;
         }
+    }
+    public function uploadHeader(){
+        $upload=new Upload("header");
+        $name=md5($this->userInfo['username'].time()).".png";
+        $result=$upload->uploadFile(
+            ROOT_USER_HEADER,
+            204800,
+            array(
+                "image/jpeg",
+                "image/jpg",
+                "image/pjpeg",
+                "image/x-png",
+                "image/png"
+            )
+            ,$name);
+        if(!$result[0]['successed'])exitByError(-7,$result[0]['msg']);
+        $sql="UPDATE `user` SET `header`='".$name."' WHERE `id`='".$this->userInfo['id']."'";
+        $this->database->query($sql);
+        $_SESSION["update"]=true;
+        return $name;
     }
     public function editProfile($id,$profile){
         if($this->userInfo['permission']>1){
@@ -177,8 +215,9 @@ class User{
             if($userT->userInfo['permission']<$this->userInfo['permission']){
                 exitByError(64,"无权限进行操作");
             }
-            $sql="UPDATE `user` SET `nickname`='".$profile['nickname']."',`email`='".$profile['email']."',`phonne`='".$profile['phone']."',`header`='".$profile['header']."' WHERE `id`='".$id."'";
+            $sql="UPDATE `user` SET `nickname`='".$profile['nickname']."',`email`='".$profile['email']."',`phone`='".$profile['phone']."' WHERE `id`='".$id."'";
             $result=$this->database->query($sql);
+            $_SESSION["update"]=true;
         }
     }
     public function delete($id){

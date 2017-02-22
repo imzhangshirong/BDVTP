@@ -8,6 +8,7 @@ loadModule("user");
 $user=new User();
 if(!$user->isLogin)exitByErrorScript("未登录，禁止进行操作","../");
 $action=@$_GET['action'];
+$sid=$user->userInfo["id"];
 if(!apiIsLegal($api))$action="";
 if(!$action)$action="task";
 ?>
@@ -23,6 +24,7 @@ if(!$action)$action="task";
         <link rel="stylesheet" type="text/css" href="./css/selector.css?t=<?=time()?>"/>
         <script src="./js/echarts.js"></script>
         <script src="./js/jquery-1.11.3.min.js"></script>
+        <script src="./js/jquery.form.min.js"></script>
         <!--script src="./js/react/react.js"></script>
         <script src="./js/react/react-dom.js"></script-->
         <script src="./js/base.js?t=<?=time()?>"></script>
@@ -105,6 +107,7 @@ if(!$action)$action="task";
                 BDVTP.api({api:"user",action:"logout"},function(resp){window.location.href="./";alert(resp.msg)});
             });
             $(".menu[action='<?=$action?>']").addClass("seleted");
+            BDVTP.sid=<?=$sid?>;
             BDVTP.load("<?=$action?>");
         </script>
     </body>

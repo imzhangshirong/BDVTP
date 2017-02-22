@@ -1,13 +1,22 @@
 <?php
-define("LIMIT_CPU_USER",20); //20%
-define("LIMIT_CPU_MANAGER",45);
-define("LIMIT_CPU_ADMIN",80);
+define("LIMIT_CPU_USER",10); //20%
+define("LIMIT_CPU_MANAGER",20);
+define("LIMIT_CPU_ADMIN",40);
+
+define("LIMIT_CPU_CORE_USER",1); //核心数
+define("LIMIT_CPU_CORE_MANAGER",1);
+define("LIMIT_CPU_CORE_ADMIN",1);
+
 
 define("LIMIT_RAM_USER",128); //20M
 define("LIMIT_RAM_MANAGER",512);
 define("LIMIT_RAM_ADMIN",1024);
 
-define("LIMIT_PROCS_USER",3); //3进程or任务
+define("LIMIT_TASK_USER",2); //2任务
+define("LIMIT_TASK_MANAGER",5);
+define("LIMIT_TASK_ADMIN",8);
+
+define("LIMIT_PROCS_USER",3); //3进程
 define("LIMIT_PROCS_MANAGER",8);
 define("LIMIT_PROCS_ADMIN",16);
 

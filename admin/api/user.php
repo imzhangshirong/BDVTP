@@ -27,7 +27,7 @@ if(checkGET(array("action"))){
                     'email'=>$data['email'],
                     'phone'=>$data['phone'],
                 );
-                $user.add($data['username'],$_POST['password'],$profile,$data['permission']);
+                $user->add($data['username'],$_POST['password'],$profile,$data['permission']);
                 successByMsg("创建用户成功");
             }
             break;
@@ -51,7 +51,7 @@ if(checkGET(array("action"))){
                     'email'=>$data['email'],
                     'phone'=>$data['phone'],
                 );
-                $user.editProfile($sid,$profile);
+                $user->editProfile($sid,$profile);
                 successByMsg("修改用户成功");
             }
             break;
@@ -59,18 +59,20 @@ if(checkGET(array("action"))){
             if(!checkGET(array("sid")))exitByError(65535,"缺失参数");
             $sid=$_GET['sid'];
             if(checkPOST(array("password"))){
-                $user.modifyPassword($sid,$_POST['password']);
+                if(strlen($_POST['password'])<8)exitByError(-6,"密码至少8位");
+                $user->modifyPassword($sid,$_POST['password']);
                 successByMsg("修改用户密码成功");
             }
             break;
         case "modifyLimit":
             if(!checkGET(array("sid")))exitByError(65535,"缺失参数");
             $sid=$_GET['sid'];
-            if(checkPOST(array("cpu","memory","space","db_space","upload","download","process","process_time"))){
+            if(checkPOST(array("cpu","memory","space","task","db_space","upload","download","process","process_time"))){
                 $data=array(
                     'cpu'=>array('+float',$_POST['cpu']),
                     'memory'=>array('+float',$_POST['memory']),
                     'space'=>array('+float',$_POST['space']),
+                    'task'=>array('+int',$_POST['task']),
                     'db_space'=>array('+float',$_POST['db_space']),
                     'upload'=>array('+float',$_POST['upload']),
                     'download'=>array('+float',$_POST['download']),
@@ -84,23 +86,29 @@ if(checkGET(array("action"))){
                     'db_space'=>array(-6,"数据库空间数值错误"),
                     'upload'=>array(-6,"上传速度数值错误"),
                     'download'=>array(-6,"下载速度数值错误"),
-                    'process'=>array(-6,"进程（任务）数值错误"),
-                    'process_time'=>array(-6,"进程（任务）时间数值错误"),
+                    'process'=>array(-6,"进程数值错误"),
+                    'task'=>array(-6,"任务数值错误"),
+                    'process_time'=>array(-6,"进程时间数值错误"),
                 );
                 $data=checkValueType($data,$error,true);
                 $limit=array(
                     'cpu'=>$data['cpu'],
                     'memory'=>$data['memory'],
                     'space'=>$data['space'],
+                    'task'=>$data['task'],
                     'db_space'=>$data['db_space'],
                     'upload'=>$data['upload'],
                     'download'=>$data['download'],
                     'process'=>$data['process'],
                     'process_time'=>$data['process_time'],
                 );
-                $user.modifyLimit($sid,$limit);
+                $user->modifyLimit($sid,$limit);
                 successByMsg("修改用户配额成功");
             }
+            break;
+        case "uploadHeader":
+            $file=$user->uploadHeader();
+            successByData("上传头像成功",array('header'=>PATH_USER_HEADER.$file));
             break;
         case "delete":
             if(!checkGET(array("sid")))exitByError(65535,"缺失参数");
@@ -111,6 +119,17 @@ if(checkGET(array("action"))){
         case "logout":
             $user->logout();
             successByMsg("您已成功注销");
+            break;
+        case "info":
+            $data=array();
+            $data['permission']=$user->getPermissionInfo();
+            $data['username']=$user->userInfo['username'];
+            $data['nickname']=$user->userInfo['nickname'];
+            $data['email']=$user->userInfo['email'];
+            $data['phone']=$user->userInfo['phone'];
+            $data['headerFile']=$user->userInfo['header'];
+            $data['header']=PATH_USER_HEADER.$user->userInfo['header'];
+            successByData("成功",$data);
             break;
         default:
             exitByError(72,"未知操作");
