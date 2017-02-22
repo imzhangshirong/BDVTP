@@ -120,6 +120,7 @@ class System{
         $res['free']=$buf[2][0];
         $res['buffers']=$buffers[1][0];
         $res['cached']=$buf[3][0];
+        $res['free']+=$res['buffers']+$res['cached'];
         $res['used']=$res['total']-$res['free'];
         
         $res['realUsed']=$res['total'] - $res['free'] - $res['cached'] - $res['buffers']; //真实内存使用
