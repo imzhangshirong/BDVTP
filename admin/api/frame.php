@@ -4,7 +4,7 @@ loadModule("user");
 if(!checkGET(array("action")))exitByError(65535,"缺失参数");
 $user=new User();
 if(!$user->isLogin)exitByErrorScript("未登录，禁止进行操作","./");
-$template=ROOT_TEMPLATE.$_GET['action'].".html";
+$template=ROOT_TEMPLATE.$_GET['action'].".php";
 if(file_exists($template)){
     require_once($template);
 }

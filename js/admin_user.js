@@ -2,7 +2,6 @@ BDVTP.api({
     api:"user",
     action:"info"
 },function(resp){
-    var headerFile=resp.data.headerFile;
     $("#user_header").css("backgroundImage","url('"+resp.data.header+"')");
     $("#user_info_username").text(resp.data.username+"（"+resp.data.permission.name+"）");
     $("#user_info_nickname").val(resp.data.nickname);
@@ -77,7 +76,6 @@ BDVTP.api({
             nickname:$("#user_info_nickname").val(),            
             email:$("#user_info_email").val(),
             phone:$("#user_info_phone").val(),
-            header:headerFile
         });
     });
 });
