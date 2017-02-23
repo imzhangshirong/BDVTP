@@ -44,7 +44,7 @@ class User{
             $_SESSION["update"];
         }
     }
-    public function getPermissionInfo($code_=-1){
+    public function getPermissionInfo($code_=-1,$data=null){
         $code=$code_;
         $re=array(
             'cpu'=>0,
@@ -58,8 +58,13 @@ class User{
             'process_time'=>0,
             'name'=>"无效"
         );
-        if($code<0 && $this->userInfo){
+        if($code<0 && $data==null && $this->userInfo){
             $code=$this->userInfo['permission'];
+            $dataLine=$this->userInfo;
+        }
+        else if($code<0 && $data!=null){
+            $code=$data['permission'];
+            $dataLine=$data;
         }
         switch($code){
             case 0:
@@ -99,15 +104,24 @@ class User{
                 $re['name']="普通用户";
                 break;
         }
-        if($code<0 && $this->userInfo){
-            $re['cpu']=$this->userInfo['cpu'];
-            $re['memory']=$this->userInfo['memory'];
-            $re['task']=$this->userInfo['task'];
-            $re['download']=$this->userInfo['net_download'];
-            $re['upload']=$this->userInfo['net_upload'];
-            $re['space']=$this->userInfo['space'];
-            $re['process']=$this->userInfo['process'];
-            $re['db_space']=$this->userInfo['db_space'];
+        if(isset($dataLine)){
+            $re['cpu']=$dataLine['cpu'];
+            $re['memory']=$dataLine['memory'];
+            $re['task']=$dataLine['task'];
+            $re['download']=$dataLine['net_download'];
+            $re['upload']=$dataLine['net_upload'];
+            $re['space']=$dataLine['space'];
+            $re['process']=$dataLine['process'];
+            $re['db_space']=$dataLine['db_space'];
+        }
+        return $re;
+    }
+    public function getGroup(){
+        $re=array();
+        for($a=$this->userInfo['permission']+1;$a<3;$a++){
+            $temp=$this->getPermissionInfo($a);
+            $temp['permission']=$a;
+            $re[]=$temp;
         }
         return $re;
     }
@@ -137,6 +151,23 @@ class User{
             $this->database->query($sql);
         }
     }
+    public function listUser(){
+        if($this->userInfo['permission']>1){
+            exitByError(64,"无权限进行操作");
+        }
+        else{
+            $sql="SELECT * FROM `user` WHERE `id`<>'".$this->userInfo['id']."' AND `permission`>".$this->userInfo['permission'];
+            $result=$this->database->query($sql);
+            $allData=$this->database->fetchAll($result,MYSQLI_ASSOC);
+            for($a=0;$a<count($allData);$a++){
+                unset($allData[$a]["password"]);
+                $allData[$a]["limit"]=$this->getPermissionInfo(-1,$allData[$a]);
+                $allData[$a]["header"]=PATH_USER_HEADER.$allData[$a]["header"];
+            }
+            return $allData;
+        }
+        
+    }
     public function getUsage(){
         $dir=ROOT_USERSPACE.$this->userInfo['username'];
         $dir_mysql=ROOT_USERSPACE_MYSQL.DATABASE_USER.$this->userInfo['username'];
@@ -147,7 +178,7 @@ class User{
             'mysql'=>array($dir_mysql,formatSizeUnit($size_mysql)),
         );
     }
-    public function modifyLimit($id,$limit){
+    public function modifyLimit($id,$permission=null,$limit=null){
         if($this->userInfo['permission']>1){
             exitByError(64,"无权限进行操作");
         }
@@ -156,12 +187,22 @@ class User{
             if($userT->userInfo['permission']<=$this->userInfo['permission']){
                 exitByError(64,"无权限进行操作");
             }
-            $limitMax=getPermissionInfo($this->userInfo['permission']);
-            if($limit['cpu']>$limitMax['cpu']||$limit['memory']>$limitMax['memory']||$limit['process']>$limitMax['process']||$limit['space']>$limitMax['space']||$limit['db_space']>$limitMax['db_space']||$limit['upload']>$limitMax['upload']||$limit['download']>$limitMax['download']||$limit['process_time']>$limitMax['process_time']||$limit['task']>$limitMax['task']){
-                exitByError(4,"超出可设置的最大值");
+            if($permission!=null && $this->userInfo['permission']<=$permission){
+                exitByError(64,"无法设置为同级或更高级的权限");
             }
-            else{
-                $sql="UPDATE `user` SET `cpu`='".$limit['cpu']."',`memory`='".$limit['memory']."',`process`='".$limit['process']."',`space`='".$limit['space'].",`task`='".$limit['task']."',`db_space`='".$limit['db_space']."',`net_upload`='".$limit['upload']."',`net_download`='".$limit['download']."',`process_time`='".$limit['process_time']."' WHERE `id`='".$id."'";
+            if($limit!=null){
+                $limitMax=getPermissionInfo($this->userInfo['permission']);
+                if($limit['cpu']>$limitMax['cpu']||$limit['memory']>$limitMax['memory']||$limit['process']>$limitMax['process']||$limit['space']>$limitMax['space']||$limit['db_space']>$limitMax['db_space']||$limit['upload']>$limitMax['upload']||$limit['download']>$limitMax['download']||$limit['process_time']>$limitMax['process_time']||$limit['task']>$limitMax['task']){
+                    exitByError(4,"超出可设置的最大值");
+                }
+                else{
+                    $sql="UPDATE `user` SET `cpu`='".$limit['cpu']."',`memory`='".$limit['memory']."',`process`='".$limit['process']."',`space`='".$limit['space'].",`task`='".$limit['task']."',`db_space`='".$limit['db_space']."',`net_upload`='".$limit['upload']."',`net_download`='".$limit['download']."',`process_time`='".$limit['process_time']."' WHERE `id`='".$id."'";
+                    $result=$this->database->query($sql);
+                    $_SESSION["update"]=true;
+                }
+            }
+            if($permission!=null){
+                $sql="UPDATE `user` SET `permission`='".$permission."' WHERE `id`='".$id."'";
                 $result=$this->database->query($sql);
                 $_SESSION["update"]=true;
             }

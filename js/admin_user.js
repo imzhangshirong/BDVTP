@@ -79,3 +79,16 @@ BDVTP.api({
         });
     });
 });
+var adminUserGroup=undefined;
+BDVTP.api({
+    api:"user",
+    action:"list"
+},function(resp){
+
+});
+BDVTP.api({
+    api:"user",
+    action:"group"
+},function(resp){
+    adminUserGroup=resp.data;
+});

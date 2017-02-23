@@ -162,6 +162,8 @@ body{
 .title{
     color:#3e3e3e;
     font-size: 16px;
+    padding: 0.5em 0px;
+    margin-bottom:0.3em;
 }
 .titlebig0{
     font-size: 32px;
@@ -472,7 +474,7 @@ overview部分
     position: absolute;
     top:0px;
 }
-#file_list .iconfont{
+.admin_list  .iconfont.file_icon{
     margin:0px 10px 0px 15px;
 }
 #file_list .icon-folder{
@@ -481,8 +483,9 @@ overview部分
 #file_list .icon-wenjian{
     color:#333333;
 }
-#file_list .operation .iconfont{
+.admin_list .operation .iconfont{
     margin:0px 6px;
+    cursor: pointer;
 }
 
 
@@ -521,4 +524,9 @@ overview部分
     margin-bottom: 20px;
     padding: 10px 20px;
     width: 200px;
+}
+
+.table_input_label{
+    color: #3c3c3c; 
+    padding-right: 16px;
 }

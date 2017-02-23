@@ -48,10 +48,10 @@ if(!$action)$action="task";
                             <span><?=$user->userInfo['permissionInfo']['name']?></span>
                         </div>
                     </div>
-                    <div id="admin_message" title="消息" class="admin_person_button admin_click">
+                    <!--div id="admin_message" title="消息" class="admin_person_button admin_click">
                         <div class="iconfont icon-xiaoxi" title="消息"></div>
                         <span>51</span>
-                    </div>
+                    </div-->
                     <div id="admin_setting" title="个人设置" class="admin_person_button admin_click">
                         <div class="iconfont icon-shezhi" title="个人设置"></div>
                     </div>
@@ -97,7 +97,7 @@ if(!$action)$action="task";
             <p style="text-align:center;font-size:14px;color:#6F6F6F">Copyright © 2016-2017. All Rights Reserved. BDVTP Alpha</p>
         </div>
         <script>
-            $(".menu").on("click",function(){
+            $(".menu").bind("click",function(){
                 $(".menu").removeClass("seleted");
                 $(this).addClass("seleted");
                 BDVTP.load($(this).attr("action"));
@@ -109,6 +109,9 @@ if(!$action)$action="task";
             $(".menu[action='<?=$action?>']").addClass("seleted");
             BDVTP.sid=<?=$sid?>;
             BDVTP.load("<?=$action?>");
+            $("#admin_setting").bind("click",function(){
+                $(".menu[action='user']").click();
+            });
         </script>
     </body>
     

@@ -74,7 +74,7 @@ body{
 }
 
 
-input{
+select,input,textarea{
     border:1px solid rgba(0,0,0,0.2);
     outline: none;
     border-radius: 2px;
@@ -88,7 +88,7 @@ input{
     margin:10px 70px;
 }
 
-input:focus{
+select:focus,input:focus,textarea:focus{
     border:1px solid #00a2ff;
 }
 .login_box .btn{

@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <div>
     <div class="selector">
         <div class="tab selected" name="个人设置">
@@ -32,9 +35,16 @@
                 </table>
             </div>
         </div>
+        <?php if(isset($_SESSION['user']) && $_SESSION['user']['permission']<2){?>
         <div class="tab" name="用户管理" id="user_manage">
-           
+            <p class="title title2">下级用户</p>
+            <table width="100%" class="admin_list" cellspacing="0" >
+                <tr><th>用户名</th><th>所属</th><th>昵称</th><th>最近登录</th><th>操作</th></tr>
+                <tr><td align="center">admin</td><td align="center">超级管理员</td><td align="center">HelloWorld</td><td align="center">2017-02-23 18:34:56 / 127.0.0.1</td><td align="center" class="operation"><span class="iconfont icon-chakan"></span><span class="iconfont icon-chongmingming"></span><span class="iconfont icon-shanchu"></span></td></tr>
+            </table>
+            <div style="text-align:right;margin:20px 0"><button class="btn">新增用户</button></div>
         </div>
+        <?php }?>
     </div>
     
     

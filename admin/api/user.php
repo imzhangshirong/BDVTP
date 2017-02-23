@@ -31,6 +31,12 @@ if(checkGET(array("action"))){
                 successByMsg("创建用户成功");
             }
             break;
+        case "list":
+            successByData("成功",$user->listUser());
+            break;
+        case "group":
+            successByData("成功",$user->getGroup());
+            break;
         case "edit":
             if(!checkGET(array("sid")))exitByError(65535,"缺失参数");
             $sid=$_GET['sid'];
@@ -67,7 +73,9 @@ if(checkGET(array("action"))){
         case "modifyLimit":
             if(!checkGET(array("sid")))exitByError(65535,"缺失参数");
             $sid=$_GET['sid'];
-            if(checkPOST(array("cpu","memory","space","task","db_space","upload","download","process","process_time"))){
+            $modifyLimit=checkPOST(array("cpu","memory","space","task","db_space","upload","download","process","process_time"));
+            $modifyPermission=checkPOST(array("permission"));
+            if($modifyLimit){
                 $data=array(
                     'cpu'=>array('+float',$_POST['cpu']),
                     'memory'=>array('+float',$_POST['memory']),
@@ -102,8 +110,30 @@ if(checkGET(array("action"))){
                     'process'=>$data['process'],
                     'process_time'=>$data['process_time'],
                 );
-                $user->modifyLimit($sid,$limit);
-                successByMsg("修改用户配额成功");
+                $permission=null;
+                if($modifyPermission){
+                    $dataP=array(
+                        'permission'=>array('+int',$_POST['permission']),
+                    );
+                    $errorP=array(
+                        'permission'=>array(-6,"权限错误"),
+                    );
+                    $dataP=checkValueType($dataP,$error,true);
+                    $permission=$dataP['permission'];
+                }
+                $user->modifyLimit($sid,$permission,$limit);
+                successByMsg("修改用户配置成功");
+            }
+            else if($modifyPermission){
+                $data=array(
+                    'permission'=>array('+int',$_POST['permission']),
+                );
+                $error=array(
+                    'permission'=>array(-6,"权限错误"),
+                );
+                $data=checkValueType($data,$error,true);
+                $user->modifyLimit($sid,$data['permission'],null);
+                successByMsg("修改用户配置成功");
             }
             break;
         case "uploadHeader":

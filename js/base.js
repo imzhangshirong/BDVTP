@@ -9,10 +9,11 @@ var BDVTP={
         this.submitProcess=0;
         this.submitComplete=complete;
     },
-    load:function(m){
-        var ele=document.getElementById(BDVTP.containerId);
+    load:function(m,target){
+        var ele=$("#"+BDVTP.containerId);
+        if(target)ele=target;
         BDVTP.current=m;
-        ele.innerHTML='<div class="load"><div class="loader"></div><span>Loading...</span></div>';
+        ele.html('<div class="load"><div class="loader"></div><span>Loading...</span></div>');
         $.ajax({
             url:"./admin/api.php",
             type:"get",
@@ -23,7 +24,7 @@ var BDVTP={
             success:function(resp){
                 if(!ele)return;
                 if(BDVTP.current!=m)return;
-                $(ele).html(resp);
+                ele.html(resp);
             }
         });
     },
